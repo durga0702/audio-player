@@ -1,0 +1,10 @@
+<p>recorder-page works!</p>
+
+<div class="flex items-center gap-4 lg:gap-3">
+    <button (click)="playSong()">play</button>
+    <button (click)="player.pause()">stop</button>
+
+    <audio id="audio-player" src="https://p.scdn.co/mp3-preview/6d00206e32194d15df329d4770e4fa1f2ced3f57#t=,1"></audio>
+    <input type="range" min="0" max={{player?.duration}} value={{currentTime}}>
+
+</div>
