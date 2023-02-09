@@ -1,10 +1,60 @@
-<p>recorder-page works!</p>
-
-<div class="flex items-center gap-4 lg:gap-3">
-    <button (click)="playSong()">play</button>
-    <button (click)="player.pause()">stop</button>
-
-    <audio id="audio-player" src="https://p.scdn.co/mp3-preview/6d00206e32194d15df329d4770e4fa1f2ced3f57#t=,1"></audio>
-    <input type="range" min="0" max={{player?.duration}} value={{currentTime}}>
-
+<div *ngFor="let data of recordings">
+    <!-- <audio id="audio" [src]="sanitizeUrl(data)" controls></audio> -->
 </div>
+
+<div>
+    <div *ngIf="!isRecording" (click)="startRecording()">
+        <button>Start New</button>
+    </div>
+    <div *ngIf="isRecording" class="flex item-center justify-around" style="width: 30%;">
+        <div>
+            <span>Recording...</span>
+
+        </div>
+        <div class="recording-timer">
+            <span>
+                {{recordingTimer}}
+            </span>
+        </div>
+        <div>
+            <button (click)="stopRecording()">
+                <span>Stop</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngFor="let message of audioRecords; let i=index;">
+    <div class="flex items-center justify-around gap-2 p-1" style="width: 30%;">
+
+        <div>
+            <span class="w-6 h-6">
+                <button (click)="message.audio?.paused ? message.audio?.play() : message.audio?.pause()">
+                    <span *ngIf="message.audio?.paused">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-play-circle">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                        </svg>
+                    </span>
+                    <span *ngIf="!message.audio?.paused">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-pause-circle">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="10" y1="15" x2="10" y2="9"></line>
+                            <line x1="14" y1="15" x2="14" y2="9"></line>
+                        </svg>
+                    </span>
+                </button>
+            </span>
+        </div>
+        <audio attr.id="audioId{{i}}" id="audioId{{i}}"
+            src="https://p.scdn.co/mp3-preview/6d00206e32194d15df329d4770e4fa1f2ced3f57#t=,1"></audio>
+        <div>
+            <input attr.id="sliderId{{i}}" id="sliderId{{i}}" type="range" class="slider"
+                value={{message?.audio?.currentTime}} min="0" max={{message?.audio?.duration}} />
+        </div>
+    </div>
+</ng-container>
